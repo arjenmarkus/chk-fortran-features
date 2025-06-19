@@ -1,0 +1,763 @@
+# buildscript.set --
+#     Define the names of the source files to be handled and the error messages
+#     that should be printed if building the program fails (note: not always
+#     a negative thing - the compiler may be checking questionable practices)
+#
+#     TODO:
+#     - maybe a descriptive string after the file name?
+#     - count the number of successfully created programs
+#       requires a category (FEATURE, DIAGNOSTIC, ... or some such)
+#       FEATURE    - test for a particular syntactic feature
+#       DIAGNOSTIC - test if the compiler recognises certain (deliberate) coding error
+#       PROBE      - test the behaviour of the program
+#       EXTENSION  - test for a well-known extension
+#     - more feedback to the user during the run
+#     - summary of failed programs
+#     - check read/write status for files that are opened twice (chk_opentwice.f90)
+#
+#     - last write with advance = 'no': file closed with newline anyway?
+#
+#     - array operations on large arrays (temporaries can exhaust the stack - automatic array done)
+#     - UNICODE
+#     - object-oriented features (a.o. finalisers)
+#     - new intrinsic routines (most mathematical functions implemented)
+#     - real(dp) with "accurate" single-precision constant
+#     - real(sp) with double-precision constant
+#     - (diagnostic) array size mismatch with subroutine (using fixed size in subroutine)
+#     - (diagnostic) character length size mismatch with subroutine (using fixed length in subroutine)
+#     - (diagnostic) interface check for subroutine (in same file, not in module)
+#     - (diagnostic) external subroutine versus external function
+#     - automatic definition derived types: type x; integer :: y = 1 end type - reset on entry into a subroutine?
+#       --> extend this program
+#     - Z format to get "strange" characters in?
+#     - "all" features in the overview tables from Fortran Forum
+#     - static versus automatic for local variables
+#     - ieee_value
+#     - CHARACTER*10 length mismatch
+#     - warnings about inappropriate use of dummy arguments (setting intent(in) arguments,
+#       using intent(out) arguments before they are set)
+#
+#     - extend chk_flush_check - check that the file is not flushed if no flush used.
+#     - extend chk_stream_access - position, determine unit of position
+#
+#     - check: i0 for input? Is that standard?
+#     - check: recursive IO (two levels - 2003 and 2008)
+#
+#     - opening a file on unit 6, does that prevent output to screen?
+#
+#     - how many files can be opened at once?
+#
+#     - what is the record length for formatted direct-access files? Do you have to do the
+#       record delimiters yourself?
+#
+#     - how does random_number cooperate with OpenMP - same sequence or not?
+#     - how to set the random number seed
+#     - check if random_seed without arguments reinitialises the series in a "random" way or not
+#
+#     - check the use of formats like "F" and "I" - are they really accepted by some compilers?
+#     - when are incorrect formats detected?
+#
+#     - check if reading more from a file (read an array that is larger than the file itself)
+#       leads to an end-of-file condition or to a read error
+#
+#     - check writing to the same file from different threads (OpenMP)
+#
+#     - check if "OPEN(NEWUNIT = ...)" without file= or status= works.
+#
+#     - check support for OpenMP 3.0, 4.0 and 5.0
+#
+#     - check behaviour of MIN() with NaN as one of the arguments
+#
+#     - check behaviour of f0.3 - does it include a leading zero? (done)
+#
+#     - keyword NON_RECURSIVE (F2018) (done)
+#
+#     - stop and error stop with variable
+#
+#     - unreachable statement
+#
+#     - warning about misalign fields in SEQUENCE derived types
+#
+#     - BLOCK/END BLOCK with implictly typed variables - problematic implementations
+#
+#     - character kinds: more emphasis
+#
+#     - optimisation issue: protection of parentheses (think of dqfun)
+#
+#     - unattractive extension: if ( ival .and. .true. ) (allows sloppiness)
+#     - unattractive extension: a*-1.0
+#     - unattractive extension: a(1.1) = ...
+#
+#     - check definition of C_PRTDIFF_T in ISO_C_BINDING
+#
+#     - check none(type,external)
+#
+#     - check go30 if (...) ... endif go30
+#
+#     - check "pointer functions" - access_func.f90
+#
+#     - Kahan's compensated summation
+#
+#     - substrings: string(10:9) ?   https://fortran-lang.discourse.group/t/accessing-zero-length-characters/9854/3
+#
+#     - array sections: array(10:9) ?
+#
+@chk_newunit
+FEATURE
+The compiler does not support OPEN( NEWUNIT = ... )
+
+@chk_block
+FEATURE
+The compiler does not support the BLOCK ... END BLOCK construct
+
+@chk_longint
+FEATURE
+The compiler does not support integers with a range larger than default
+
+@chk_quadreal
+FEATURE
+The compiler does not support reals with a precision larger than double precision
+
+@chk_quadcomplex
+FEATURE
+The compiler does not support complex numbers with a precision larger than double precision
+
+@chk_opentwice
+PROBE
+Error compiling the program - check the code
+
+@chk_associate
+FEATURE
+The compiler does not support the ASSOCIATE ... END ASSOCIATE construct
+
+@chk_allocstring
+FEATURE
+The compiler does not support character strings with allocatable length
+
+@chk_allocstring_deriv
+FEATURE
+The compiler does not support derived types with allocatable-length character strings
+
+@chk_auto_realloc
+PROBE
+Error compiling the program - check the code
+
+@chk_read_tabs
+PROBE
+Please check the error messages - the program should be acceptable
+
+@chk_diff_lengths
+EXTENSION
+The compiler does not support array constructors containing strings of different lengths
+
+@chk_extra_long_line
+EXTENSION
+The compiler does not support line lengths exceeding the 132-characters maximum
+
+@chk_logical_eq
+EXTENSION
+The compiler does not support the use of arithmetic comparison (.EQ. and such) for logicals
+
+@chk_do_concurrent
+FEATURE
+The compiler does not support the DO CONCURRENT ... ENDDO construct
+
+@chk_do_concurrent_f2018
+FEATURE
+The compiler does not support the DO CONCURRENT locality clauses (Fortran 2018)
+
+@chk_square_brackets
+FEATURE
+The compiler does not support square brackets for array constructors
+
+@chk_internal_routine_arg
+FEATURE
+The compiler does not support passing internal routines as actual arguments
+
+@chk_format_static
+PROBE
+The compiler statically detects type errors in the format to a WRITE statement
+
+@chk_default_filename
+PROBE
+Please check the error messages - the program should be acceptable
+
+@chk_bessel
+FEATURE
+The compiler does not support the Bessel functions (intrinsic functions in Fortran 2008)
+
+@chk_erf
+FEATURE
+The compiler does not support all of the error functions (intrinsic functions in Fortran 2008)
+
+@chk_gamma
+FEATURE
+The compiler does not support the Gamma functions (intrinsic functions in Fortran 2008)
+
+@chk_norm2_hypot
+FEATURE
+The compiler does not support the NORM2 or HYPOT functions (intrinsic functions in Fortran 2008)
+
+@chk_g0_format
+FEATURE
+The compiler does not support the G0 format
+
+@chk_i0_format
+EXTENSION
+The compiler does not allow the I0 format for input
+
+@chk_array_bound_static
+PROBE
+The compiler does a static check on array bounds
+
+@chk_end_of_line
+PROBE
+The compiler does not support stream access
+This program cannot check this particular feature
+
+@chk_get_argument
+FEATURE
+The compiler does not support the GET_COMMAND_ARGUMENT routine
+
+@chk_flush
+FEATURE
+The compiler does not support the FLUSH statement
+
+@chk_execute_cmdline
+FEATURE
+The compiler does not support the intrinsic routines get_command_argument or execute_command_line
+(see the program code)
+
+@chk_flush_check
+FEATURE
+The compiler does not support the FLUSH statement or it does not
+support the intrinsic routines get_command_argument or execute_command_line
+(see the program code)
+
+@chk_advance_no
+FEATURE
+The compiler does not support the ADVANCE= option to the WRITE statement
+
+@chk_file_incomplete
+PROBE
+Please check the error messages - the code should be acceptable
+
+@chk_get_env
+FEATURE
+The compiler does not support the GET_ENVIRONMENT_VARIABLE subroutine
+
+@chk_fortran_env
+FEATURE
+The compiler does not support the ISO_FORTRAN_ENV intrinsic module
+
+@chk_iso_fortran_kinds
+FEATURE
+The compiler does not support the ISO_FORTRAN_ENV intrinsic module or it does
+not support the kinds arrays defined by Fortran 2008
+
+@chk_iso_fortran_storage
+FEATURE
+The compiler does not support the ISO_FORTRAN_ENV intrinsic module or it does
+not support the storage parameters defined by Fortran 2008
+
+@chk_compiler_version
+FEATURE
+The compiler does not support the intrinsic routines COMPILER_VERSION
+and COMPILER_OPTIONS
+
+@chk_allocate_source
+FEATURE
+The compiler does not support the SOURCE argument to ALLOCATE
+
+@chk_allocate_mold
+FEATURE
+The compiler does not support the MOLD argument to ALLOCATE
+
+@chk_decimal_io
+FEATURE
+The compiler does not support the DECIMAL specifier in READ/WRITE statements
+
+@chk_round_io
+FEATURE
+The compiler does not support the ROUND or SIGN specifiers in READ/WRITE
+
+@chk_tab_io
+PROBE
+Please check the error messages - the code should be acceptable
+
+@chk_iomsg
+FEATURE
+The compiler does not support the IOSMG= keyword in READ/WRITE statements
+
+@chk_stream_access
+FEATURE
+The compiler does not support stream accesss
+
+@chk_protected
+FEATURE
+The compiler does not support the PROTECTED attribute
+
+@chk_protected_set
+FEATURE
+The compiler either does not support the PROTECTED attribute or
+it flags attempts to set protected module variables as errors
+
+@chk_character_func
+FEATURE
+The compiler does not support functions returning strings with
+allocatable length
+
+@chk_unused_variable
+DIAGNOSTIC
+The compiler seems to regard unused variables as an error
+
+@chk_unused_argument
+DIAGNOSTIC
+The compiler seems to regard unused arguments as an error
+
+@chk_interface_mismatch
+DIAGNOSTIC
+The compiler seems to regard interface mismatches to be an error
+
+@chk_contiguous
+FEATURE
+The compiler does not support the CONTIGUOUS attribute
+
+@chk_is_contiguous
+FEATURE
+The compiler does not support the IS_CONTIGUOUS intrinsic function
+
+@chk_contiguous_non
+DIAGNOSTIC
+The compiler does not support the CONTIGUOUS attribute or it detected
+that the arrays passed to the subroutine are not contiguous
+
+@chk_pointer_1_to_n
+FEATURE
+The compiler does not support the Fortran 2003 feature of associating a
+n-dimensional pointer with an array of one dimension
+
+@chk_pointer_simply_contiguous
+FEATURE
+The compiler does not support the Fortran 2008 feature of associating a
+n-dimensional pointer with a simply contiguous section of an n-dimensional
+array
+
+@chk_constructor_mismatch
+DIAGNOSTIC
+The compiler regards shape mismatches at array assignment as an error
+
+@chk_move_alloc
+FEATURE
+The compiler does not support the MOVE_ALLOC intrinsic subroutine
+
+@chk_submodule
+FEATURE
+The compiler does not support submodules
+
+@chk_int_too_large
+DIAGNOSTIC
+The compiler does not accept integer values exceeding the limits
+
+@chk_real_literal
+PROBE
+Please check the error messages - the code should be acceptable
+
+@chk_dim_7
+FEATURE
+The compiler does not support arrays with seven dimensions or more
+
+@chk_dim_15
+FEATURE
+The compiler does not support arrays with 15 dimensions or more
+
+@chk_long_statement
+FEATURE
+The compiler does not support statements of 40 lines or longer
+
+@chk_init_derived
+PROBE
+Please check the error messages - the code should be acceptable
+
+# Courtesy of Ian Chivers
+@ch0509
+PROBE
+Please check the error messages - the code should be acceptable
+
+@chk_iso_c_binding
+FEATURE
+The compiler does not support the ISO_C_BINDING module or the BIND attribute.
+This hampers interfacing with C (sub)programs
+
+@chk_c_sizeof
+FEATURE
+The compiler does not support the Fortran 2008 function C_SIZEOF (or the ISO_C_BINDING module)
+
+@chk_isnan
+FEATURE
+The compiler does not support the ieee_is_nan function
+
+@chk_ieee_support
+FEATURE
+The compiler does not support the ieee_arithmetic or ieee_exceptions modulestop
+
+@chk_complex
+FEATURE
+The compiler does not support the %RE and %IM syntax for complex numbers
+
+@chk_hyperbolic
+FEATURE
+The compiler does not support the hyperbolic or inverse hyperbolic functions
+for complex arguments
+
+@chk_inverse_hyperbolic
+FEATURE
+The compiler does not support the inverse hyperbolic functions for
+real arguments
+
+@chk_stop_code
+FEATURE
+The compiler does not support a code with the STOP statement
+
+@chk_param_derived
+FEATURE
+The compiler does not support parameterised derived types
+
+@chk_hollerith
+FEATURE
+The compiler does not seem to accept Hollerith constants
+
+@chk_charsets
+FEATURE
+The compiler does not support the selected_char_kind function
+
+@chk_io_encoding
+FEATURE
+The compiler does not support the encoding keyword
+
+@chk_findloc
+FEATURE
+The compiler does not support the FINDLOC function
+
+@chk_char_maxval
+FEATURE
+The compiler does not support the maxval/maxloc/minval/minloc functions
+on character strings
+
+@chk_boz_values
+FEATURE
+The compiler does not support BOZ values in the int/real/dble/cmplx functions
+
+@chk_public_private
+FEATURE
+The compiler does not support public entities with a private type
+
+@chk_alloc_message
+FEATURE
+The compiler does not support the ERRMSG keyword for the allocate statement
+
+@chk_io_infinite
+PROBE
+Please check the error messages - the code should be acceptable
+
+@chk_non_intrinsic
+FEATURE
+The compiler does not support the NON_INTRINSIC keyword for the USE statement
+
+@chk_recursive_alloc
+FEATURE
+The compiler does not support types with a recursive allocatable component
+
+@chk_pointer_dim
+FEATURE
+The compiler does not support associated multidimensional pointers with
+one-dimensional arrays
+
+@chk_pointer_init
+FEATURE
+The compiler does not support pointer initialisation
+
+@chk_type_intrinsic
+FEATURE
+The compiler does not support the type(intrinsic) syntax
+
+@chk_index_long
+FEATURE
+The compiler does not support the use of indices of non-default kind
+
+@chk_lbound_long_error
+DIAGNOSTIC
+The compiler does a range check on the LBOUND function
+
+@chk_function_unset
+DIAGNOSTIC
+The compiler does a check for functions that do not return a value
+
+@chk_alloc_long
+FEATURE
+The compiler does not support array allocation with indices of non-default kind
+
+#
+# This program must be called twice to identify the behaviour of the random number generator,
+# more specifically: how it is initialised.
+#
+@chk_random_number
+PROBE
+Please check the error messages - the code should be acceptable
+
+@chk_random_number
+PROBE
+Please check the error messages - the code should be acceptable
+
+@chk_inquire_size
+FEATURE
+The compiler does not support the SIZE= keyword in the INQUIRE statement
+
+# This is a F2003 feature - F2008 extends it
+@chk_pointer_rank
+FEATURE
+The compiler does not allow a 2D pointer to be associated with a 1D array
+
+@chk_implied_shape
+FEATURE
+The compiler does not support implied shape arrays (parameter arrays with automatic size)
+
+@chk_implied_char_length
+FEATURE
+The compiler does not support implied lengths for character string parameters
+
+@chk_pointer_function
+FEATURE
+The compiler does not support pointer functions
+
+@chk_unlimited_format
+FEATURE
+The compiler does not support the unlimited format feature
+
+@chk_exit_if
+FEATURE
+The compiler does not support EXIT from any named construct
+
+@chk_bitwise_compare
+FEATURE
+The compiler does not support the bitwise comparison functions (BGE etc.)
+
+@chk_bit_functions
+FEATURE
+The compiler does not support all Fortran 2008 bit functions
+
+@chk_maxloc_backward
+FEATURE
+The compiler does not support the BACK argument to the MINLOC or MAXLOC functions
+
+@chk_null_as_absent
+FEATURE
+The compiler does not support NULL pointers as representing a missing argument
+
+@chk_signed_zero
+PROBE
+Please check the error messages - the code should be acceptable
+
+@chk_cray_pointer
+EXTENSION
+The compiler does not support Cray pointers
+
+@chk_uddtio
+FEATURE
+The compiler does not support user-defined I/O for derived types
+
+@chk_open_action
+FEATURE
+The compiler does not support the ACTION= specifier
+
+@chk_dir_separator
+PROBE
+Please check the error messages - the code should be acceptable
+
+@chk_backslash
+EXTENSION
+The compiler seems to treat backslashes in literal strings as escape characters
+
+@chk_automatic_array
+PROBE
+Please check the error messages - the code should be acceptable
+
+@chk_source_tab
+EXTENSION
+The compiler does not accept soure code containing tabs
+
+@chk_recursive_io
+PROBE
+Please check the error messages - the code should be acceptable
+
+@chk_parity
+FEATURE
+The compiler does not support the Fortran 2008 parity function
+
+@chk_location
+FEATURE
+The compiler does not support the Fortran 2008 BACK= argument to MAXLOC/MINLOC
+or the FINDLOC function
+
+@chk_locate_string
+FEATURE
+The compiler does not support the FINDLOC function or using it on strings
+
+@chk_compiler_info
+FEATURE
+The compiler does not support the COMPILER_OPTIONS or COMPILER_VERSION functions
+
+@chk_impure_elemental
+FEATURE
+The compiler does not support impure elemental functions/subroutines
+
+@chk_generic_distinct
+FEATURE
+The compiler does not allow specific routines to be distinguished by pointer or
+allocatable attributes only
+
+@chk_many_open_files
+PROBE
+Please check the error messages - the code should be acceptable
+
+@chk_non_recursive
+FEATURE
+The compiler does not support the Fortran 2018 keyword NON_RECURSIVE
+
+@chk_format_f03
+FEATURE
+The compiler does not support the "f0.d" format
+
+@chk_assumed_rank
+FEATURE
+The compiler does not support the Fortran 2018 feature of assumed ranks
+
+@chk_assumed_type
+FEATURE
+The compiler does not support the Fortran 2018 feature of assumed types (C interoperability)
+
+@chk_assumed_size_f2018
+FEATURE
+The compiler does not support the Fortran 2018 convention regarding assumed-size arrays
+
+@chk_ieee_f2018
+FEATURE
+The compiler does not support the Fortran 2018 extended support for the IEEE standard
+
+@chk_reduce
+FEATURE
+The compiler does not support the Fortran 2018 intrinsic reduce
+
+@chk_random_init
+FEATURE
+The compiler does not support the Fortran 2018 intrinsic random_init
+
+@chk_semicolon
+EXTENSION
+The compiler should have accepted the program - please check
+
+@chk_coarrays_image
+FEATURE
+The compiler does not seem to support coarrays or requires a specific option
+
+@chk_open_coarrays
+FEATURE
+The compiler does not seem to support coarrays or requires a specific option
+
+@chk_coarrays_reduction
+FEATURE
+The compiler does not seem to support reduction routines (coarrays, Fortran 2018)
+or requires a specific option
+
+@chk_c_ptrdiff_t
+FEATURE
+The compiler does not support the kind C_PTRDIFF_T for the difference between memory addresses
+
+@chk_recursive_elemental
+FEATURE
+The compiler does not support recursive elemental routines (Fortran 2018)
+
+@chk_writealloc
+EXTENSION
+The compiler adheres to the restriction about allocatable and pointer components
+
+@chk_implicit_enhancement
+FEATURE
+The compiler does not support IMPLICIT NONE(TYPE,EXTERNAL) (Fortran 2018)
+
+@chk_varying_string_array_arg
+FEATURE
+The compiler does not support explicitly specifying the string length with string arrays
+
+@chk_string_array_arg
+EXTENSION
+The compiler does not support an array of literal strings of varying lengths
+
+@chk_param_derived_diff
+FEATURE
+The compiler checks the type parameters and finds them incompatible
+
+@chk_initialise_sum
+FEATURE
+The compiler does not accept intrinsics like SUM in initialisation statements
+
+@chk_recursive_default
+FEATURE
+The compiler does not support the Fortran 2018 feature that routines are recursive by default
+
+@chk_split
+FEATURE
+The compiler does not support the Fortran 2023 intrinsic function "SPLIT"
+
+@chk_tokenize
+FEATURE
+The compiler does not support the Fortran 2023 intrinsic subroutine "TOKENIZE"
+
+@chk_degrees
+FEATURE
+The compiler does not support the Fortran 2023 trigonomic functions for degree arguments
+
+@chk_halfpi
+FEATURE
+The compiler does not support the Fortran 2023 trigonomic functions for half rotations
+
+@chk_logical_kinds
+FEATURE
+The compiler does not support the Fortran 2023 intrinsic function SELECTED_LOGICAL_KINDS
+
+@chk_conditional
+FEATURE
+The compiler does not support the Fortran 2023 feature of conditional expressions
+
+@chk_writeauto
+FEATURE
+The compiler does not support the Fortran 2023 feature of automatically reallocate
+output strings in internal writes
+
+@chk_iso_fortran_f2023
+FEATURE
+The compiler does not support the new Fortran 2023 kind names from ISO_FORTRAN_ENV
+
+@chk_enumeration_type
+FEATURE
+The compiler does not support the new Fortran 2023 enumeration types
+
+@chk_c_enum
+FEATURE
+The compiler does not support the C-style enum values (Fortran 2018)
+
+@chk_named_c_enum
+FEATURE
+The compiler does not support the named C-style enum values (Fortran 2023)
+
+@chk_enumeration_type
+FEATURE
+The compiler does not support the Fortran-style enumerations (Fortran 2023)
+
+@chk_boz_extended
+FEATURE
+The compiler does not support the extended Fortran 2023 BOZ functionality
+
+@chk_ieee_2020
+FEATURE
+The compiler does not support the 60559:2020 IEEE standard with new functions
