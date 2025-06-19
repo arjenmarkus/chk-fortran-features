@@ -765,3 +765,17 @@ The compiler does not support the 60559:2020 IEEE standard with new functions
 @chk_automatic_trim
 FEATURE
 The compiler does not support the Fortran 2023 automatic trim (at) edit descriptor
+
+@chk_print_leading_zero
+FEATURE
+The compiler does not support the Fortran 2023 options for printing/suppressing a leading zero
+
+@chk_simple_procedure
+FEATURE
+The compiler does not support the Fortran 2023 feature of simple procedures
+
+@chk_reduce_concurrent
+FEATURE
+The compiler does not support the Fortran 2023 feature of reduce clauses with DO CONCURRENT
+
+
