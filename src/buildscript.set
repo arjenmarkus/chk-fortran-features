@@ -761,3 +761,7 @@ The compiler does not support the extended Fortran 2023 BOZ functionality
 @chk_ieee_2020
 FEATURE
 The compiler does not support the 60559:2020 IEEE standard with new functions
+
+@chk_automatic_trim
+FEATURE
+The compiler does not support the Fortran 2023 automatic trim (at) edit descriptor
