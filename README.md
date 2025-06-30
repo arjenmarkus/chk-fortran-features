@@ -61,6 +61,23 @@ chmod +x chkfeatures compile
 ought to do that.
 
 
+### Using the Python Makefile generator 
+
+We've introduced a python script that will scan the buildscript.set file 
+and generate a Makefile that can be then executed with `make -k` the `-k`
+means that the Make command won't stop if a compilation fails, which is crucial for this.
+
+You can then do `make check` to run the scripts
+
+TLDR:
+
+```
+cd src
+python3 generate_make.py
+make -k 
+make check 
+```
+
 ## Additional information
 
 The program "buildscript" takes the input file "buildscript.set" to set
@@ -77,4 +94,6 @@ The format of this file is very simple:
     the compilation fails as an aid to the user to interpret this failure.
 
   - Then an empty line to separate each block.
+
+
 
