@@ -750,10 +750,6 @@ The compiler does not support the C-style enum values (Fortran 2018)
 FEATURE
 The compiler does not support the named C-style enum values (Fortran 2023)
 
-@chk_enumeration_type
-FEATURE
-The compiler does not support the Fortran-style enumerations (Fortran 2023)
-
 @chk_boz_extended
 FEATURE
 The compiler does not support the extended Fortran 2023 BOZ functionality
