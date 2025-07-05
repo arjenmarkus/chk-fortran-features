@@ -12,7 +12,7 @@ program chk_reduce
     x = reduce( array, select_max )
 
 contains
-real function select_max( a, b )
+real pure function select_max( a, b )
     real, intent(in) :: a, b
 
     select_max = max( a, b )

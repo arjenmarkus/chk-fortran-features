@@ -21,7 +21,8 @@ program buildscript
 
     character(len=80) :: line
     character(len=20) :: type_program
-    character(len=20) :: redirect = ' >>features.out 2>&1'
+    character(len=40) :: redirect      = ' >>features.out 2>&1'
+    character(len=40) :: redirect_fail = ' >>failures.out 2>&1'
 
     open( lunin, file = 'buildscript.set', status = 'old' , iostat = ierr )
 
@@ -37,6 +38,8 @@ program buildscript
     write( lunscr, '(a)' ) '#!/bin/sh'
     write( lunbat, '(2a)' ) 'echo Output of the checks >features.out'
     write( lunscr, '(2a)' ) 'echo Output of the checks >features.out'
+    write( lunbat, '(a)'  ) 'del /q _runtime_check_ >null'
+    write( lunscr, '(a)'  ) 'rm -f _runtime_check_  >/dev/null'
 
     label = 0
     end_program = .false.
@@ -110,15 +113,31 @@ program buildscript
             label = label + 1
             write( lunbat, '(3a,i0)' ) 'if not exist ', trim(line(2:)), '.exe goto next', label
             write( lunbat, '(3a)'    ) trim(line(2:)), '.exe', redirect
+            write( lunbat, '(a)'     ) 'if exist _runtime_check_ ('
+            write( lunbat, '(a)'     ) '    del /q _runtime_check_'
+            write( lunbat, '(a,a)'   ) '    echo .', redirect_fail
+            write( lunbat, '(4a)'    ) '    echo Program ', trim(line(2:)), ' failed ', redirect_fail
+            write( lunbat, '(a)'     ) ')'
             write( lunbat, '(a,i0)'  ) 'goto skip', label
             write( lunbat, '(a,i0)'  ) ':next', label
+            write( lunbat, '(a,a)'   ) 'echo .', redirect_fail
+            write( lunbat, '(4a)'    ) 'echo Program ', trim(line(2:)), ' did not compile:', redirect_fail
 
             write( lunscr, '(3a)'    ) 'if [ -f ', trim(line(2:)), '.exe ]; then'
             write( lunscr, '(3x,4a)' ) './', trim(line(2:)), '.exe', redirect
+            write( lunscr, '(3x,a)'  ) 'if [ -f _runtime_check_ ]; then'
+            write( lunscr, '(6x,a)'  ) 'rm -f _runtime_check_'
+            write( lunscr, '(6x,2a)' ) 'echo .', redirect_fail
+            write( lunscr, '(6x,4a)' ) 'echo Program ', trim(line(2:)), ' failed ', redirect_fail
+            write( lunscr, '(3x,a)'  ) 'fi'
             write( lunscr, '(a)'     ) 'else'
+            write( lunscr, '(a,a)'   ) 'echo .', redirect_fail
+            write( lunscr, '(4a)'    ) 'echo Program ', trim(line(2:)), ' did not compile:', redirect_fail
         else
-            write( lunbat, '(3a)'   ) '   echo ', trim(line), redirect
+            write( lunbat, '(3a)'    ) '   echo ', trim(line), redirect
+            write( lunbat, '(3a)'    ) '   echo ', trim(line), redirect_fail
             write( lunscr, '(4a)'    ) '   echo ''', trim(line), '''', redirect
+            write( lunscr, '(4a)'    ) '   echo ''', trim(line), '''', redirect_fail
         endif
 
     enddo
@@ -131,4 +150,7 @@ program buildscript
     write( *, '(a,i0,a)' )   '    Number of diagnostic checks:              ', number_diagnostics
     write( *, '(a,i0,a)' )   '    Number of checks on behaviour/properties: ', number_probes
     write( *, '(a,i0,a)' )   '    Number of checks on compiler extensions:  ', number_extensions
+    write( *, '(a)' )        'Output files for the script:'
+    write( *, '(a)' )        '    features.out -- detailed report of the runs'
+    write( *, '(a)' )        '    failures.out -- overview of detected failures'
 end program buildscript

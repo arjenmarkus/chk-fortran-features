@@ -3,6 +3,10 @@
 #     that should be printed if building the program fails (note: not always
 #     a negative thing - the compiler may be checking questionable practices)
 #
+#     Note:
+#     To detect run-time failures, programs that are known to cause that
+#     use a file "_runtime_check_" that is deleted upon successful completion.
+#
 #     TODO:
 #     - maybe a descriptive string after the file name?
 #     - count the number of successfully created programs
@@ -102,6 +106,13 @@
 #
 #     - array sections: array(10:9) ?
 #
+# Superseded
+#@chk_writeauto
+#FEATURE
+#The compiler does not support the Fortran 2023 feature of automatically
+#reallocate
+#output strings in internal writes
+
 @chk_newunit
 FEATURE
 The compiler does not support OPEN( NEWUNIT = ... )
@@ -116,11 +127,13 @@ The compiler does not support integers with a range larger than default
 
 @chk_quadreal
 FEATURE
-The compiler does not support reals with a precision larger than double precision
+The compiler does not support reals with a precision larger than double
+precision
 
 @chk_quadcomplex
 FEATURE
-The compiler does not support complex numbers with a precision larger than double precision
+The compiler does not support complex numbers with a precision larger
+than double precision
 
 @chk_opentwice
 PROBE
@@ -136,7 +149,8 @@ The compiler does not support character strings with allocatable length
 
 @chk_allocstring_deriv
 FEATURE
-The compiler does not support derived types with allocatable-length character strings
+The compiler does not support derived types with allocatable-length
+character strings
 
 @chk_auto_realloc
 PROBE
@@ -148,7 +162,8 @@ Please check the error messages - the program should be acceptable
 
 @chk_diff_lengths
 EXTENSION
-The compiler does not support array constructors containing strings of different lengths
+The compiler does not support array constructors containing strings of
+different lengths
 
 @chk_extra_long_line
 EXTENSION
@@ -156,7 +171,8 @@ The compiler does not support line lengths exceeding the 132-characters maximum
 
 @chk_logical_eq
 EXTENSION
-The compiler does not support the use of arithmetic comparison (.EQ. and such) for logicals
+The compiler does not support the use of arithmetic comparison (.EQ. and such)
+for logicals
 
 @chk_do_concurrent
 FEATURE
@@ -184,19 +200,23 @@ Please check the error messages - the program should be acceptable
 
 @chk_bessel
 FEATURE
-The compiler does not support the Bessel functions (intrinsic functions in Fortran 2008)
+The compiler does not support the Bessel functions (intrinsic functions in
+Fortran 2008)
 
 @chk_erf
 FEATURE
-The compiler does not support all of the error functions (intrinsic functions in Fortran 2008)
+The compiler does not support all of the error functions (intrinsic functions
+in Fortran 2008)
 
 @chk_gamma
 FEATURE
-The compiler does not support the Gamma functions (intrinsic functions in Fortran 2008)
+The compiler does not support the Gamma functions (intrinsic functions in
+Fortran 2008)
 
 @chk_norm2_hypot
 FEATURE
-The compiler does not support the NORM2 or HYPOT functions (intrinsic functions in Fortran 2008)
+The compiler does not support the NORM2 or HYPOT functions (intrinsic
+functions in Fortran 2008)
 
 @chk_g0_format
 FEATURE
@@ -225,7 +245,8 @@ The compiler does not support the FLUSH statement
 
 @chk_execute_cmdline
 FEATURE
-The compiler does not support the intrinsic routines get_command_argument or execute_command_line
+The compiler does not support the intrinsic routines get_command_argument
+or execute_command_line
 (see the program code)
 
 @chk_flush_check
@@ -391,7 +412,8 @@ This hampers interfacing with C (sub)programs
 
 @chk_c_sizeof
 FEATURE
-The compiler does not support the Fortran 2008 function C_SIZEOF (or the ISO_C_BINDING module)
+The compiler does not support the Fortran 2008 function C_SIZEOF (or the
+ISO_C_BINDING module)
 
 @chk_isnan
 FEATURE
@@ -399,7 +421,7 @@ The compiler does not support the ieee_is_nan function
 
 @chk_ieee_support
 FEATURE
-The compiler does not support the ieee_arithmetic or ieee_exceptions modulestop
+The compiler does not support the ieee_arithmetic or ieee_exceptions module
 
 @chk_complex
 FEATURE
@@ -498,8 +520,8 @@ FEATURE
 The compiler does not support array allocation with indices of non-default kind
 
 #
-# This program must be called twice to identify the behaviour of the random number generator,
-# more specifically: how it is initialised.
+# This program must be called twice to identify the behaviour of the random
+number generator, more specifically: how it is initialised.
 #
 @chk_random_number
 PROBE
@@ -520,7 +542,8 @@ The compiler does not allow a 2D pointer to be associated with a 1D array
 
 @chk_implied_shape
 FEATURE
-The compiler does not support implied shape arrays (parameter arrays with automatic size)
+The compiler does not support implied shape arrays (parameter arrays with
+automatic size)
 
 @chk_implied_char_length
 FEATURE
@@ -548,7 +571,8 @@ The compiler does not support all Fortran 2008 bit functions
 
 @chk_maxloc_backward
 FEATURE
-The compiler does not support the BACK argument to the MINLOC or MAXLOC functions
+The compiler does not support the BACK argument to the MINLOC or MAXLOC
+functions
 
 @chk_null_as_absent
 FEATURE
@@ -634,15 +658,18 @@ The compiler does not support the Fortran 2018 feature of assumed ranks
 
 @chk_assumed_type
 FEATURE
-The compiler does not support the Fortran 2018 feature of assumed types (C interoperability)
+The compiler does not support the Fortran 2018 feature of assumed types
+(C interoperability)
 
 @chk_assumed_size_f2018
 FEATURE
-The compiler does not support the Fortran 2018 convention regarding assumed-size arrays
+The compiler does not support the Fortran 2018 convention regarding
+assumed-size arrays
 
 @chk_ieee_f2018
 FEATURE
-The compiler does not support the Fortran 2018 extended support for the IEEE standard
+The compiler does not support the Fortran 2018 extended support for
+the IEEE standard
 
 @chk_reduce
 FEATURE
@@ -671,7 +698,8 @@ or requires a specific option
 
 @chk_c_ptrdiff_t
 FEATURE
-The compiler does not support the kind C_PTRDIFF_T for the difference between memory addresses
+The compiler does not support the kind C_PTRDIFF_T for the difference between
+memory addresses
 
 @chk_recursive_elemental
 FEATURE
@@ -687,7 +715,8 @@ The compiler does not support IMPLICIT NONE(TYPE,EXTERNAL) (Fortran 2018)
 
 @chk_varying_string_array_arg
 FEATURE
-The compiler does not support explicitly specifying the string length with string arrays
+The compiler does not support explicitly specifying the string length with
+string arrays
 
 @chk_string_array_arg
 EXTENSION
@@ -703,7 +732,8 @@ The compiler does not accept intrinsics like SUM in initialisation statements
 
 @chk_recursive_default
 FEATURE
-The compiler does not support the Fortran 2018 feature that routines are recursive by default
+The compiler does not support the Fortran 2018 feature that routines are
+recursive by default
 
 @chk_split
 FEATURE
@@ -715,28 +745,28 @@ The compiler does not support the Fortran 2023 intrinsic subroutine "TOKENIZE"
 
 @chk_degrees
 FEATURE
-The compiler does not support the Fortran 2023 trigonomic functions for degree arguments
+The compiler does not support the Fortran 2023 trigonomic functions for
+degree arguments
 
 @chk_halfpi
 FEATURE
-The compiler does not support the Fortran 2023 trigonomic functions for half rotations
+The compiler does not support the Fortran 2023 trigonomic functions for
+half rotations
 
 @chk_logical_kinds
 FEATURE
-The compiler does not support the Fortran 2023 intrinsic function SELECTED_LOGICAL_KINDS
+The compiler does not support the Fortran 2023 intrinsic function
+SELECTED_LOGICAL_KINDS
 
 @chk_conditional
 FEATURE
-The compiler does not support the Fortran 2023 feature of conditional expressions
-
-@chk_writeauto
-FEATURE
-The compiler does not support the Fortran 2023 feature of automatically reallocate
-output strings in internal writes
+The compiler does not support the Fortran 2023 feature of conditional
+expressions
 
 @chk_iso_fortran_f2023
 FEATURE
-The compiler does not support the new Fortran 2023 kind names from ISO_FORTRAN_ENV
+The compiler does not support the new Fortran 2023 kind names from
+ISO_FORTRAN_ENV
 
 @chk_enumeration_type
 FEATURE
@@ -764,11 +794,13 @@ The compiler does not support the 60559:2020 IEEE standard with new functions
 
 @chk_automatic_trim
 FEATURE
-The compiler does not support the Fortran 2023 automatic trim (at) edit descriptor
+The compiler does not support the Fortran 2023 automatic trim (at) edit
+descriptor
 
 @chk_print_leading_zero
 FEATURE
-The compiler does not support the Fortran 2023 options for printing/suppressing a leading zero
+The compiler does not support the Fortran 2023 options for printing/suppressing
+a leading zero
 
 @chk_simple_procedure
 FEATURE
@@ -776,6 +808,18 @@ The compiler does not support the Fortran 2023 feature of simple procedures
 
 @chk_reduce_concurrent
 FEATURE
-The compiler does not support the Fortran 2023 feature of reduce clauses with DO CONCURRENT
+The compiler does not support the Fortran 2023 feature of reduce clauses with
+DO CONCURRENT
 
+@chk_minmax_empty
+PROBE
+Error compiling the program - check the code
+
+@chk_iomsg_deferred
+PROBE
+Error compiling the program - check the code - should work for Fortran 2023
+
+@chk_write_deferred
+PROBE
+Error compiling the program - check the code - should work for Fortran 2023
 

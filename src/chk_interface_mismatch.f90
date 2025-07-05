@@ -19,9 +19,13 @@ program chk_interface_mismatch
 
     integer :: just_one
 
+    open( 10, file = '_runtime_check_' ); write( 10, *) 'Started'
+
     write( *, '(a)' ) 'The compiler may issue a warning on interface mismatches'
     write( *, '(a)' ) 'Check the output'
 
     call arbitrary_args( just_one )
+
+    close( 10, status = 'delete' )
 
 end program chk_interface_mismatch

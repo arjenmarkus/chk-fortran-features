@@ -22,4 +22,7 @@ program chk_iomsg
     if ( ierr == 0 ) then
         write( *, '(/,a)' ) '    The error code was NOT set apparently!'
     endif
+    if ( msg == '' ) then
+        write( *, '(/,a)' ) '    The error message was NOT filled!'
+    endif
 end program chk_iomsg
