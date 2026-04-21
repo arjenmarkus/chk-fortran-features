@@ -823,3 +823,35 @@ Error compiling the program - check the code - should work for Fortran 2023
 PROBE
 Error compiling the program - check the code - should work for Fortran 2023
 
+@chk_value_out_of_range
+DIAGNOSTIC
+The compiler detected the overflow - parameter value too large
+
+@chk_value_out_of_range_var
+DIAGNOSTIC
+The compiler detected the overflow - variable value too large
+
+@chk_char_to_int
+EXTENSION
+The compiler does not allow setting an integer to a string value
+
+@chk_forward_reference_dimension
+EXTENSION
+The compiler does not allow forward referencing for an array size
+
+@chk_wrong_interface_case1
+DIAGNOSTIC
+The compiler checks the interface, even for routines outside of a module
+
+@chk_wrong_interface_case2
+DIAGNOSTIC
+The compiler checks the interface, even for routines defined after the first use
+
+@chk_wrong_interface_case3
+DIAGNOSTIC
+The compiler does NOT check for "external" routines or does not support "IMPLICIT NONE(EXTERNAL)"
+
+@chk_wrong_interface_case4
+DIAGNOSTIC
+The compiler correctly checks for actual literal arguments passed to INTENT(OUT) dummy arguments
+

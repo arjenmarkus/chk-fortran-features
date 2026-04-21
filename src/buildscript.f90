@@ -19,7 +19,7 @@ program buildscript
     logical :: exists
     logical :: end_program
 
-    character(len=80) :: line
+    character(len=120) :: line
     character(len=20) :: type_program
     character(len=40) :: redirect      = ' >>features.out 2>&1'
     character(len=40) :: redirect_fail = ' >>failures.out 2>&1'
